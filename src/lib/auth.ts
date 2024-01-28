@@ -5,7 +5,9 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import EmailProvider from 'next-auth/providers/email';
 
+import { sendVerificationRequest } from "@/lib/send-verification-request";
 import { env } from "@/env";
 import { db } from "@/lib/db";
 
@@ -50,6 +52,12 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
+    EmailProvider({
+      // name: 'email',
+      server: '',
+      from: process.env.FROM_ADDRESS!,
+      sendVerificationRequest,
     }),
     /**
      * ...add more providers here.
